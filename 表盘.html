@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>biaopan</title>
+</head>
+<style>
+	.clock{
+		width: 200px;
+		height: 200px;
+		border: 5px solid #aaa;
+		background: radial-gradient(#fff,#ccc);
+		box-shadow: 0 0 5px #000;
+		margin:auto;
+		position:fixed;
+		left:0;
+		right:0;
+		bottom: 0;
+		top:0;
+		border-radius: 50%;
+	}
+</style>
+<body>
+	<div class="clock"></div>
+</body>
+<script>
+	window.onload=function () {
+        var clock=document.querySelector(".clock");
+        creatClock();
+        //得到现在的时间
+        var data=new Date();
+        var hh=data.getHours();
+        var mm=data.getMinutes();
+        var ss=data.getSeconds();
+        //得到实际指针
+        var h=creatPointer(6,30,"#000",hh*30+mm*6*1/12);
+        var m=creatPointer(4,50,"#000",mm*6);
+        var s=creatPointer(2,70,"#000",ss*6);
+        //静态转动态
+        setInterval(function () {
+            var data=new Date();
+            var hh=data.getHours();
+            var mm=data.getMinutes();
+            var ss=data.getSeconds();
+            h.style.transform="rotate("+(hh*30+mm*6*1/12)+"deg)";
+            m.style.transform="rotate("+mm*6+"deg)";
+            s.style.transform="rotate("+ss*6+"deg)";
+        },1000)
+        //创建表盘
+        function  creatClock() {
+            var widths,heigths
+            for(var i=0;i<60;i++){
+                if(i%5==0){
+                    widths=6;heigths=10;
+                }else{
+                    widths=4;heigths=6;
+                }
+                var div=document.createElement("div");
+                div.style.cssText="width:"+widths+"px;height:"+heigths+"px;background:#000;position:absolute;left:"+(200-widths)/2+"px;top:0;";
+                div.style.transformOrigin="center 100px";
+                div.style.transform="rotate("+i*6+"deg)";
+                clock.appendChild(div);
+            }
+        }
+        //创建指针
+        function creatPointer(w,h,c,a) {
+            var div=document.createElement("div");
+            div.style.cssText="width:"+w+"px;height:"+h+"px;background:"+c+";position:absolute;left:"+(200-w)/2+"px;top:"+(100-h)+"px;";
+            div.style.transformOrigin="center bottom";
+            div.style.transform="rotate("+a+"deg)";
+            clock.appendChild(div);
+            return div;
+        }   
+    }
+</script>
+</html>
